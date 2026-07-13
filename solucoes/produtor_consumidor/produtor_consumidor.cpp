@@ -23,14 +23,14 @@ void produtor(int n_itens) {
     for (int i = 0; i < n_itens; ++i) {
         int item = valor(rng);
 
-        vazios.acquire();                 
+        vazios.acquire(); // consome 1, quando for 0 espera                
         {
-            std::lock_guard<std::mutex> lock(mtx);
+            std::lock_guard<std::mutex> lock(mtx); // Garante segurança para ninguem mais alterar o buffer
             buffer.push_back(item);
             std::cout << "[Produtor] produziu " << item
                       << " | buffer_size=" << buffer.size() << "\n";
         }
-        cheios.release();                 
+        cheios.release();  // liberar 1                
 
         std::this_thread::sleep_for(std::chrono::milliseconds(tempo_ms(rng)));
     }
